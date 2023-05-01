@@ -1,0 +1,22 @@
+{
+  "name": "traiding-simulator-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "apollo-server": "3.12.0",
+    "express": "4.18.2",
+    "express-graphql": "0.12.0",
+    "knex": "2.4.2",
+    "mysql": "2.18.1"
+  },
+  "devDependencies": {
+    "@types/express": "4.17.17",
+    "@types/node": "18.16.3",
+    "ts-node": "10.9.1"
+  }
+}
