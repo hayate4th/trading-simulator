@@ -4,7 +4,6 @@ import { CompanySwingTrade } from "../types/CompanySwingTrade";
 import { BeatLoader } from "react-spinners";
 import { useState } from "react";
 import { markets, sectors, sortTypes } from "../constants/options";
-import { ReactComponent as SortIcon } from "../assets/sort.svg";
 import { ReactComponent as SortAscIcon } from "../assets/sort_asc.svg";
 import { ReactComponent as SortDescIcon } from "../assets/sort_desc.svg";
 import { sortCompanySwingTrades } from "../utils/utils";
@@ -148,8 +147,8 @@ const StyledComponent: React.FC<Props> = styled(Component)`
   }
 
   .sort {
-    fill: #a9ffdc;
     display: flex;
+    fill: #a9ffdc;
   }
 
   .sector-wrapper,
