@@ -5,10 +5,15 @@ import { BeatLoader } from "react-spinners";
 import { useState } from "react";
 import { markets, sectors, sortTypes } from "../constants/options";
 import { ReactComponent as SortIcon } from "../assets/sort.svg";
+import { ReactComponent as SortAscIcon } from "../assets/sort_asc.svg";
+import { ReactComponent as SortDescIcon } from "../assets/sort_desc.svg";
+import { sortCompanySwingTrades } from "../utils/utils";
 
 type Props = {
   filters: { sector: string; market: string };
+  sorting: { type: string; order: string };
   setFilter: (filter: { sector: string; market: string }) => void;
+  setSorting: (sorting: { type: string; order: string }) => void;
 } & OuterProps;
 
 const Component: React.FC<Props & PropsForStyled> = ({
@@ -17,8 +22,10 @@ const Component: React.FC<Props & PropsForStyled> = ({
   allCompanySwingTrades,
   selectedCode,
   filters,
+  sorting,
   handleClickItem,
   setFilter,
+  setSorting,
 }) => {
   return (
     <div className={className}>
@@ -57,7 +64,7 @@ const Component: React.FC<Props & PropsForStyled> = ({
             <select
               name="sortType"
               onChange={(event) =>
-                setFilter({ ...filters, sector: event.target.value })
+                setSorting({ ...sorting, type: event.target.value })
               }
             >
               {sortTypes.map(({ value, text }) => (
@@ -65,7 +72,15 @@ const Component: React.FC<Props & PropsForStyled> = ({
               ))}
             </select>
           </div>
-          <SortIcon />
+          {sorting.order === "ASC" ? (
+            <SortAscIcon
+              onClick={() => setSorting({ ...sorting, order: "DESC" })}
+            />
+          ) : (
+            <SortDescIcon
+              onClick={() => setSorting({ ...sorting, order: "ASC" })}
+            />
+          )}
         </div>
       </div>
 
@@ -80,6 +95,7 @@ const Component: React.FC<Props & PropsForStyled> = ({
                 (companySwingTrade.companyInfo.market === filters.market ||
                   filters.market === "-")
             )
+            .sort(sortCompanySwingTrades(sorting))
             .map((companySwingTrade) => (
               <dt
                 className={
@@ -235,14 +251,21 @@ const Container: React.FC<OuterProps> = ({
     market: "-",
   });
 
+  const [sorting, setSorting] = useState<{ type: string; order: string }>({
+    type: "CODE",
+    order: "ASC",
+  });
+
   return (
     <StyledComponent
       loading={loading}
       allCompanySwingTrades={allCompanySwingTrades}
       selectedCode={selectedCode}
       filters={filters}
+      sorting={sorting}
       handleClickItem={handleClickItem}
       setFilter={setFilters}
+      setSorting={setSorting}
     />
   );
 };

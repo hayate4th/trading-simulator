@@ -22,7 +22,12 @@ export const ALL_COMAPNY_QUERY = gql`
       totalLoss
       totalProfit
       total
+      absoluteTotal
+      totalVolume
       recentConsecutive
+      maxConsecutiveLoss
+      maxConsecutiveProfit
+      current
     }
   }
 `;

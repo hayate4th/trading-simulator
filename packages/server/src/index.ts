@@ -255,6 +255,7 @@ const allCompanySwingTrades = async (
       )
     )
   );
+
   return allCompanySwingTrades
     .filter(
       (companySwingTrade) =>
@@ -269,8 +270,7 @@ const allCompanySwingTrades = async (
         ].startAt
       );
       return recentDate >= new Date(date);
-    })
-    .sort((a, b) => b.recentConsecutive - a.recentConsecutive);
+    });
 };
 
 const addSwingMemo = async (code: string) => {

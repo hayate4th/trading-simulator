@@ -15,6 +15,7 @@ export type CompanySwingTrade = {
   totalLoss: number;
   totalProfit: number;
   total: number;
+  absoluteTotal: number;
   totalVolume: number;
   recentConsecutive: number;
   maxConsecutiveLoss: number;
