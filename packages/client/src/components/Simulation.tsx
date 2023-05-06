@@ -40,7 +40,7 @@ const StyledComponent: React.FC<Props> = styled(Component)`
 
   .simulations-wrapper {
     display: flex;
-    padding: 20px 0 20px 20px;
+    padding: 0 0 20px 20px;
     color: #a9ffdc;
   }
 

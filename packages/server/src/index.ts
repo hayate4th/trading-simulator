@@ -22,6 +22,7 @@ const typeDefs = gql`
     company_name: String!
     market: String!
     sector: String!
+    is_favorite: Boolean!
   }
 
   type SwingTrade {
@@ -68,6 +69,7 @@ const typeDefs = gql`
 
   type Mutation {
     addSwingMemo(code: ID!): [Int]
+    setIsFavorite(code: ID!, isFavorite: Boolean!): Int
   }
 `;
 
@@ -278,6 +280,12 @@ const addSwingMemo = async (code: string) => {
   return result;
 };
 
+const setIsFavorite = async (code: string, isFavorite: boolean) => {
+  await knex("company_info")
+    .update({ is_favorite: isFavorite })
+    .where("code", code);
+};
+
 const server = new ApolloServer({
   typeDefs,
   resolvers: {
@@ -327,6 +335,10 @@ const server = new ApolloServer({
     Mutation: {
       addSwingMemo: (_: unknown, contextValue: { code: string }) =>
         addSwingMemo(contextValue.code),
+      setIsFavorite: (
+        _: unknown,
+        contextValue: { code: string; isFavorite: boolean }
+      ) => setIsFavorite(contextValue.code, contextValue.isFavorite),
     },
   },
   csrfPrevention: true,

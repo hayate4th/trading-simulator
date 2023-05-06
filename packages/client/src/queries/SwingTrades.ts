@@ -18,6 +18,7 @@ export const ALL_COMAPNY_QUERY = gql`
         company_name
         sector
         market
+        is_favorite
       }
       totalLoss
       totalProfit
@@ -57,6 +58,9 @@ export const COMAPNY_QUERY = gql`
       companyInfo {
         code
         company_name
+        market
+        sector
+        is_favorite
       }
       totalLoss
       totalProfit

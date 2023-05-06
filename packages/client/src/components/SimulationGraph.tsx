@@ -7,25 +7,48 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import styled from "styled-components";
+import { useMutation } from "@apollo/client";
 
 import { CompanySwingTrade } from "../types/CompanySwingTrade";
-import styled from "styled-components";
+import { ReactComponent as FavoriteIcon } from "../assets/favorite.svg";
+import { ReactComponent as FavoriteFilledIcon } from "../assets/favorite_filled.svg";
+import { SET_IS_FAVORITE } from "../mutations/CompanyInfo";
+import { useState } from "react";
 
 type Props = {
-  companySwingTrade: CompanySwingTrade;
-};
+  viewIsFavorite: boolean;
+  handleFavoriteClick: () => void;
+} & OuterProps;
 
 const Component: React.FC<Props & PropsForStyled> = ({
   className,
   companySwingTrade,
+  viewIsFavorite,
+  handleFavoriteClick,
 }) => {
   return (
     <div className={className}>
-      <div>
-        ({companySwingTrade.companyInfo.code}){" "}
-        {companySwingTrade.companyInfo.company_name} 株価:{" "}
-        {companySwingTrade.current.toLocaleString()} 出来高:{" "}
-        {companySwingTrade.totalVolume.toLocaleString()}
+      <div className="company-info-wrapper">
+        {viewIsFavorite ? (
+          <FavoriteFilledIcon onClick={handleFavoriteClick} />
+        ) : (
+          <FavoriteIcon onClick={handleFavoriteClick} />
+        )}
+        <div className="company-info">
+          <span className="company-info-ms">
+            {companySwingTrade.companyInfo.market}{" "}
+            {companySwingTrade.companyInfo.sector}
+          </span>
+          <span>
+            ({companySwingTrade.companyInfo.code}){" "}
+            {companySwingTrade.companyInfo.company_name}{" "}
+          </span>
+        </div>
+        <div>
+          株価: {companySwingTrade.current.toLocaleString()} 出来高:{" "}
+          {companySwingTrade.totalVolume.toLocaleString()}
+        </div>
       </div>
       <div>
         <div></div>
@@ -81,7 +104,7 @@ const Component: React.FC<Props & PropsForStyled> = ({
 
       <ComposedChart
         width={1200}
-        height={740}
+        height={730}
         data={companySwingTrade.swingTrades}
       >
         <CartesianGrid stroke="#A9FFDC" strokeWidth={2} />
@@ -122,6 +145,22 @@ const Component: React.FC<Props & PropsForStyled> = ({
 };
 
 const StyledComponent: React.FC<Props> = styled(Component)`
+  .company-info {
+    display: flex;
+    flex-direction: column;
+
+    &-ms {
+      font-size: 13px;
+    }
+
+    &-wrapper {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+  }
+
   .positive {
     color: #e555c7;
     -webkit-text-stroke: 1.5px #e555c7;
@@ -133,8 +172,32 @@ const StyledComponent: React.FC<Props> = styled(Component)`
   }
 `;
 
-const Container: React.FC<Props> = ({ companySwingTrade }) => {
-  return <StyledComponent companySwingTrade={companySwingTrade} />;
+type OuterProps = {
+  companySwingTrade: CompanySwingTrade;
+};
+
+const Container: React.FC<OuterProps> = ({ companySwingTrade }) => {
+  const [viewIsFavorite, setViewIsFavorite] = useState(
+    companySwingTrade.companyInfo.is_favorite
+  );
+  const [setIsFavorite] = useMutation(SET_IS_FAVORITE);
+
+  const handleFavoriteClick = () => {
+    setViewIsFavorite(!viewIsFavorite);
+    setIsFavorite({
+      variables: {
+        code: companySwingTrade.companyInfo.code,
+        isFavorite: !companySwingTrade.companyInfo.is_favorite,
+      },
+    });
+  };
+  return (
+    <StyledComponent
+      companySwingTrade={companySwingTrade}
+      viewIsFavorite={viewIsFavorite}
+      handleFavoriteClick={handleFavoriteClick}
+    />
+  );
 };
 
 export const SimulationGraph = Container;

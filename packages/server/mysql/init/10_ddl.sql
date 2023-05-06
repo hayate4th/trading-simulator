@@ -23,6 +23,7 @@ CREATE TABLE company_info (
     company_name varchar(50) NOT NULL,
     market varchar(50) NOT NULL,
     sector varchar(50) NOT NULL,
+    is_favorite tinyint(1) NOT NULL DEFAULT 0,
     PRIMARY KEY (`code`),
     KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -4,6 +4,7 @@ export type CompanySwingTrade = {
     company_name: string;
     sector: string;
     market: string;
+    is_favorite: boolean;
   };
   swingTrades: {
     startAt: string;
