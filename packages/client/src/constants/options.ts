@@ -35,28 +35,7 @@ export const sectors = [
   "電気・ガス",
 ];
 
-export const markets = [
-  "-",
-  "東証一部",
-  "東証PR",
-  "東証ST",
-  "JQS",
-  "JQG",
-  "東証GR",
-  "東証マザ",
-  "東証二部",
-  "名証MA",
-  "名証セント",
-  "名証NE",
-  "札証",
-  "名証二部",
-  "福証",
-  "札証アンビ",
-  "福証QB",
-  "名証一部",
-  "名証PR",
-  "東証",
-];
+export const markets = ["-", "東証PR", "東証ST", "東証GR", "東証"];
 
 export const sortTypes = [
   { value: "CODE", text: "銘柄コード" },
