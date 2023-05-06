@@ -109,55 +109,56 @@ const simulateSwingTrade = async (
   const transactions = await getTransactionsByCode(code);
 
   return transactions.map((transaction, index) => {
-    const boughtStocksInUnits = Math.floor(capital / transaction.close / UNIT);
+    const { date, close, volume } = transaction;
+    const boughtStocksInUnits = Math.floor(capital / close / UNIT);
     if (boughtStocksInUnits <= 0)
       return {
-        startAt: transaction.date,
-        endAt: transaction.date,
+        startAt: date,
+        endAt: date,
         benefit: 0,
-        close: transaction.close,
-        volume: transaction.volume,
+        close,
+        volume,
       };
     const boughtStocks = boughtStocksInUnits * UNIT;
 
-    const startingAsset = boughtStocks * transaction.close;
+    const startingAsset = boughtStocks * close;
     for (let i = index + 1; i < index + range; i++) {
       if (transactions[i] === undefined) {
         return {
-          startAt: transaction.date,
+          startAt: date,
           endAt: transactions[i - 1].date,
           benefit: transactions[i - 1].close * boughtStocks - startingAsset,
-          close: transaction.close,
-          volume: transaction.volume,
+          close,
+          volume,
         };
       }
       const result = transactions[i].close * boughtStocks;
       const line = result / startingAsset;
       if (lossLine >= line) {
         return {
-          startAt: transaction.date,
+          startAt: date,
           endAt: transactions[i].date,
           benefit: result - startingAsset,
-          close: transaction.close,
-          volume: transaction.volume,
+          close,
+          volume,
         };
       } else if (profitLine <= line) {
         return {
-          startAt: transaction.date,
+          startAt: date,
           endAt: transactions[i].date,
           benefit: result - startingAsset,
-          close: transaction.close,
-          volume: transaction.volume,
+          close,
+          volume,
         };
       }
     }
     return {
-      startAt: transaction.date,
+      startAt: date,
       endAt: transactions[index + range - 1].date,
       benefit:
         transactions[index + range - 1].close * boughtStocks - startingAsset,
-      close: transaction.close,
-      volume: transaction.volume,
+      close,
+      volume,
     };
   });
 };

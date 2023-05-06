@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { CompanySwingTrade } from "../types/CompanySwingTrade";
 import { BeatLoader } from "react-spinners";
 import { useState } from "react";
-import { markets, sectors } from "../constants/options";
+import { markets, sectors, sortTypes } from "../constants/options";
+import { ReactComponent as SortIcon } from "../assets/sort.svg";
 
 type Props = {
   filters: { sector: string; market: string };
@@ -21,32 +22,50 @@ const Component: React.FC<Props & PropsForStyled> = ({
 }) => {
   return (
     <div className={className}>
-      <div className="filter-wrapper">
-        <div className="sector-wrapper">
-          <label htmlFor="sector">セクター</label>
-          <select
-            name="sector"
-            onChange={(event) =>
-              setFilter({ ...filters, sector: event.target.value })
-            }
-          >
-            {sectors.map((sector) => (
-              <option value={sector}>{sector}</option>
-            ))}
-          </select>
+      <div className="operations">
+        <div className="filters">
+          <div className="sector-wrapper">
+            <label htmlFor="sector">セクター</label>
+            <select
+              name="sector"
+              onChange={(event) =>
+                setFilter({ ...filters, sector: event.target.value })
+              }
+            >
+              {sectors.map((sector) => (
+                <option value={sector}>{sector}</option>
+              ))}
+            </select>
+          </div>
+          <div className="market-wrapper">
+            <label htmlFor="market">マーケット</label>
+            <select
+              name="market"
+              onChange={(event) =>
+                setFilter({ ...filters, market: event.target.value })
+              }
+            >
+              {markets.map((market) => (
+                <option value={market}>{market}</option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="market-wrapper">
-          <label htmlFor="market">マーケット</label>
-          <select
-            name="market"
-            onChange={(event) =>
-              setFilter({ ...filters, market: event.target.value })
-            }
-          >
-            {markets.map((market) => (
-              <option value={market}>{market}</option>
-            ))}
-          </select>
+        <div className="sort">
+          <div className="sort-type-wrapper">
+            <label htmlFor="sortType">ソート</label>
+            <select
+              name="sortType"
+              onChange={(event) =>
+                setFilter({ ...filters, sector: event.target.value })
+              }
+            >
+              {sortTypes.map(({ value, text }) => (
+                <option value={value}>{text}</option>
+              ))}
+            </select>
+          </div>
+          <SortIcon />
         </div>
       </div>
 
@@ -92,6 +111,11 @@ const Component: React.FC<Props & PropsForStyled> = ({
 };
 
 const StyledComponent: React.FC<Props> = styled(Component)`
+  .operations {
+    display: flex;
+    justify-content: space-between;
+  }
+
   .loading-wrapper {
     display: flex;
     justify-content: center;
@@ -103,12 +127,18 @@ const StyledComponent: React.FC<Props> = styled(Component)`
     justify-content: center;
   }
 
-  .filter-wrapper {
+  .filters {
+    display: flex;
+  }
+
+  .sort {
+    fill: #a9ffdc;
     display: flex;
   }
 
   .sector-wrapper,
-  .market-wrapper {
+  .market-wrapper,
+  .sort-type-wrapper {
     position: relative;
     font-family: "Exo 2", sans-serif;
     font-weight: 200;

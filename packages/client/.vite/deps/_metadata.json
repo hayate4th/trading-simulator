@@ -1,0 +1,50 @@
+{
+  "hash": "7e41ba7d",
+  "browserHash": "fb24bd6b",
+  "optimized": {
+    "react": {
+      "src": "../../../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "dabba701",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "240144fd",
+      "needsInterop": true
+    },
+    "@apollo/client": {
+      "src": "../../../../node_modules/@apollo/client/index.js",
+      "file": "@apollo_client.js",
+      "fileHash": "ae0aae11",
+      "needsInterop": false
+    },
+    "styled-components": {
+      "src": "../../../../node_modules/styled-components/dist/styled-components.browser.esm.js",
+      "file": "styled-components.js",
+      "fileHash": "96fe4784",
+      "needsInterop": false
+    },
+    "react-spinners": {
+      "src": "../../../../node_modules/react-spinners/esm/index.js",
+      "file": "react-spinners.js",
+      "fileHash": "f3a772d8",
+      "needsInterop": false
+    },
+    "recharts": {
+      "src": "../../../../node_modules/recharts/es6/index.js",
+      "file": "recharts.js",
+      "fileHash": "72be96a9",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-HHKUBSN3": {
+      "file": "chunk-HHKUBSN3.js"
+    },
+    "chunk-3FPCWRYY": {
+      "file": "chunk-3FPCWRYY.js"
+    }
+  }
+}

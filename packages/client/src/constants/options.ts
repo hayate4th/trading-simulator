@@ -57,3 +57,16 @@ export const markets = [
   "名証PR",
   "東証",
 ];
+
+export const sortTypes = [
+  { value: "CODE", text: "銘柄コード" },
+  { value: "MAX_CONSECUTIVE_PROFIT", text: "最大連続利益日数" },
+  { value: "MAX_CONSECUTIVE_LOSS", text: "最大連続損失日数" },
+  { value: "RECENT_CONSECUTIVES", text: "連続日数評価値" },
+  { value: "TOTAL", text: "損益合計" },
+  { value: "ABSOLUTE_TOTAL", text: "絶対損益合計" },
+  { value: "TOTAL_PROFT", text: "利益合計" },
+  { value: "TOTAL_LOSS", text: "損失合計" },
+  { value: "CURRENT", text: "株価" },
+  { value: "TOTAL_VOLUME", text: "出来高" },
+];
