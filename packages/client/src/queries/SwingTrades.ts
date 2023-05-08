@@ -6,12 +6,14 @@ export const ALL_COMAPNY_QUERY = gql`
     $range: Int!
     $lossLine: Float!
     $profitLine: Float!
+    $favoriteOnly: Boolean!
   ) {
     allCompanySwingTrades(
       capital: $capital
       range: $range
       lossLine: $lossLine
       profitLine: $profitLine
+      favoriteOnly: $favoriteOnly
     ) {
       companyInfo {
         code

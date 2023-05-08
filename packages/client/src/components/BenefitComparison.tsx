@@ -6,6 +6,7 @@ import { useState } from "react";
 import { markets, sectors, sortTypes } from "../constants/options";
 import { ReactComponent as SortAscIcon } from "../assets/sort_asc.svg";
 import { ReactComponent as SortDescIcon } from "../assets/sort_desc.svg";
+import { ReactComponent as RandomIcon } from "../assets/random.svg";
 import { sortCompanySwingTrades } from "../utils/utils";
 
 type Props = {
@@ -20,9 +21,11 @@ const Component: React.FC<Props & PropsForStyled> = ({
   loading,
   allCompanySwingTrades,
   selectedCode,
+  favoriteOnly,
   filters,
   sorting,
   handleClickItem,
+  handleFavoriteOnlyClick,
   setFilter,
   setSorting,
 }) => {
@@ -56,6 +59,12 @@ const Component: React.FC<Props & PropsForStyled> = ({
               ))}
             </select>
           </div>
+          <div className="favorite-wrapper">
+            <RandomIcon
+              className={favoriteOnly ? "random" : ""}
+              onClick={handleFavoriteOnlyClick}
+            />
+          </div>
         </div>
         <div className="sort">
           <div className="sort-type-wrapper">
@@ -71,15 +80,17 @@ const Component: React.FC<Props & PropsForStyled> = ({
               ))}
             </select>
           </div>
-          {sorting.order === "ASC" ? (
-            <SortAscIcon
-              onClick={() => setSorting({ ...sorting, order: "DESC" })}
-            />
-          ) : (
-            <SortDescIcon
-              onClick={() => setSorting({ ...sorting, order: "ASC" })}
-            />
-          )}
+          <div className="sort-order-wrapper">
+            {sorting.order === "ASC" ? (
+              <SortAscIcon
+                onClick={() => setSorting({ ...sorting, order: "DESC" })}
+              />
+            ) : (
+              <SortDescIcon
+                onClick={() => setSorting({ ...sorting, order: "ASC" })}
+              />
+            )}
+          </div>
         </div>
       </div>
 
@@ -151,6 +162,21 @@ const StyledComponent: React.FC<Props> = styled(Component)`
     fill: #a9ffdc;
   }
 
+  .favorite-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+
+    svg {
+      width: 40px;
+      opacity: 0.5;
+
+      &.random {
+        opacity: 1;
+      }
+    }
+  }
+
   .sector-wrapper,
   .market-wrapper,
   .sort-type-wrapper {
@@ -180,6 +206,12 @@ const StyledComponent: React.FC<Props> = styled(Component)`
       border: 3px solid #a9ffdc;
       border-bottom: none;
       outline: 0;
+    }
+  }
+
+  .sort-order-wrapper {
+    svg {
+      width: 40px;
     }
   }
 
@@ -236,16 +268,23 @@ type OuterProps = {
   loading: boolean;
   allCompanySwingTrades?: CompanySwingTrade[];
   selectedCode: string;
+  favoriteOnly: boolean;
   handleClickItem: (code: string) => void;
+  handleFavoriteOnlyClick: () => void;
 };
 
 const Container: React.FC<OuterProps> = ({
   loading,
   allCompanySwingTrades,
   selectedCode,
+  favoriteOnly,
   handleClickItem,
+  handleFavoriteOnlyClick,
 }) => {
-  const [filters, setFilters] = useState<{ sector: string; market: string }>({
+  const [filters, setFilters] = useState<{
+    sector: string;
+    market: string;
+  }>({
     sector: "-",
     market: "-",
   });
@@ -260,9 +299,11 @@ const Container: React.FC<OuterProps> = ({
       loading={loading}
       allCompanySwingTrades={allCompanySwingTrades}
       selectedCode={selectedCode}
+      favoriteOnly={favoriteOnly}
       filters={filters}
       sorting={sorting}
       handleClickItem={handleClickItem}
+      handleFavoriteOnlyClick={handleFavoriteOnlyClick}
       setFilter={setFilters}
       setSorting={setSorting}
     />

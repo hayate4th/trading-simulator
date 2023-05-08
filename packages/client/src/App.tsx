@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OperationVariables, QueryResult, useQuery } from "@apollo/client";
 import styled from "styled-components";
 
@@ -14,6 +14,7 @@ const INITIAL_VARIABLES = {
   range: 14,
   lossLine: 0.95,
   profitLine: 1.05,
+  favoriteOnly: false,
 };
 
 export type Variables = typeof INITIAL_VARIABLES;
@@ -34,6 +35,7 @@ type Props = {
   >;
   setVariables: (variables: Variables) => void;
   handleItemClick: (code: string) => void;
+  handleFavoriteOnlyClick: () => void;
 };
 
 const Component: React.FC<Props & PropsForStyled> = ({
@@ -43,6 +45,7 @@ const Component: React.FC<Props & PropsForStyled> = ({
   allCompany,
   setVariables,
   handleItemClick,
+  handleFavoriteOnlyClick,
 }) => {
   const variableList: { text: string; type: keyof Variables }[] = [
     { text: "元本", type: "capital" },
@@ -78,7 +81,9 @@ const Component: React.FC<Props & PropsForStyled> = ({
           loading={allCompany.loading}
           allCompanySwingTrades={allCompany.data?.allCompanySwingTrades}
           selectedCode={variables.code}
+          favoriteOnly={variables.favoriteOnly}
           handleClickItem={handleItemClick}
+          handleFavoriteOnlyClick={handleFavoriteOnlyClick}
         />
       </div>
       <Simulation
@@ -140,6 +145,12 @@ const Container: React.FC = () => {
     company.refetch({ code: itemCode });
   };
 
+  const handleFavoriteOnlyClick = () => {
+    const favoriteOnly = !variables.favoriteOnly;
+    setVariables({ ...variables, favoriteOnly });
+    allCompany.refetch({ favoriteOnly });
+  };
+
   return (
     <StyledComponent
       variables={variables}
@@ -147,6 +158,7 @@ const Container: React.FC = () => {
       company={company}
       setVariables={setVariables}
       handleItemClick={handleItemClick}
+      handleFavoriteOnlyClick={handleFavoriteOnlyClick}
     />
   );
 };

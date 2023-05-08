@@ -51,7 +51,7 @@ const typeDefs = gql`
     dailyTransaction(code: ID!, date: String!): DailyTransaction
     dailyTransactions(code: ID!): [DailyTransaction]
     companyInfo(code: ID!): CompanyInfo
-    allCompanyInfos: [CompanyInfo]
+    allCompanyInfos(favoriteOnly: Boolean!): [CompanyInfo]
     companySwingTrade(
       code: ID!
       capital: Int!
@@ -64,6 +64,7 @@ const typeDefs = gql`
       range: Int!
       lossLine: Float!
       profitLine: Float!
+      favoriteOnly: Boolean!
     ): [CompanySwingTrade]
   }
 
@@ -96,9 +97,18 @@ const getCompanyInfo = async (code: string) => {
   return result[0];
 };
 
-const getAllCompanyInfos = async () => {
-  const result = await knex.select().from("company_info");
-  return result;
+const getAllCompanyInfos = async (favoriteOnly: boolean) => {
+  if (favoriteOnly) {
+    const all = await knex.select().from("company_info");
+    const randomArray = [];
+    while (randomArray.length < 5) {
+      const rand = Math.floor(Math.random() * all.length);
+      randomArray.push(all[rand]);
+      all.splice(rand, 1);
+    }
+    return randomArray;
+  }
+  return await knex.select().from("company_info");
 };
 
 const simulateSwingTrade = async (
@@ -243,9 +253,10 @@ const allCompanySwingTrades = async (
   capital: number,
   range: number,
   lossLine: number,
-  profitLine: number
+  profitLine: number,
+  favoriteOnly: boolean
 ) => {
-  const companyInfos = await getAllCompanyInfos();
+  const companyInfos = await getAllCompanyInfos(favoriteOnly);
   const allCompanySwingTrades = await Promise.all(
     companyInfos.map(async (companyInfo) =>
       getCompanySwingTrade(
@@ -298,7 +309,8 @@ const server = new ApolloServer({
         getTransactionsByCode(contextValue.code),
       companyInfo: (_: unknown, contextValue: { code: string }) =>
         getCompanyInfo(contextValue.code),
-      allCompanyInfos: getAllCompanyInfos,
+      allCompanyInfos: (_: unknown, contextValue: { favoriteOnly: boolean }) =>
+        getAllCompanyInfos(contextValue.favoriteOnly),
       companySwingTrade: (
         _: unknown,
         contextValue: {
@@ -323,13 +335,15 @@ const server = new ApolloServer({
           range: number;
           lossLine: number;
           profitLine: number;
+          favoriteOnly: boolean;
         }
       ) =>
         allCompanySwingTrades(
           contextValue.capital,
           contextValue.range,
           contextValue.lossLine,
-          contextValue.profitLine
+          contextValue.profitLine,
+          contextValue.favoriteOnly
         ),
     },
     Mutation: {
